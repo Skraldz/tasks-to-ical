@@ -1,29 +1,31 @@
-import os
+from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2.credentials import credentials 
-from google.auth.transport.requests import Requests
+from google.auth.transport.requests import Request
+import os
 
 SCOPES = ['https://www.googleapis.com/auth/tasks.readonly']
 
-
 def get_credentials():
     creds = None
-    if os.path.exists("token.json") 
     
-
-        # Step 1: try to load existing token
+    # Step 1: try to load existing token
     if os.path.exists("token.json"):
-        Credentials.from_authorized_user_file()
-        pass
+        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
     
     # Step 2: if no valid creds, either refresh or do browser flow
     if not creds or not creds.valid:
-        if # creds exist but are expired and have a refresh token:
-            # refresh them
-            pass
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
         else:
-            # run browser flow and save result
-            pass
-        # Step 3: save the new/refreshed token to disk
-    
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'client_secrets.json',
+                SCOPES)
+
+            flow.run_local_server()
+            creds = flow.credentials
+
+        with open("token.json", "w") as f:
+            f.write(creds.to_json())
+        
+            
     return creds
