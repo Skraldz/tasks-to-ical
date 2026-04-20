@@ -1,6 +1,6 @@
 services:
   tasks-to-ical:
-    build: ./tasks-to-ical
+    build: ./
     container_name: tasks_to_ical
     env_file:
       - .env
@@ -12,5 +12,5 @@ services:
       - ./credentials.json:/tasks-to-ical/credentials.json
       - ./token.json:/tasks-to-ical/token.json
     ports:
-      - 9090:8080
+      - 9799:8080
     restart: unless-stopped
