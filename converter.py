@@ -17,6 +17,7 @@ def get_tasks_as_ical(creds):
         for task in tasks.get('items', []):
             if task.get('due'):  # only tasks with a due date
                 event = Event()
+                event.uid = task['id']
                 event.name = task["title"]
                 event.begin = task['due']
                 # set event.name and event.begin
